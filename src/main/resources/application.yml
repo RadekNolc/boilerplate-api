@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: application_development.yml, application_production.yml
+  application:
+    name: "Boilerplate API"
+  profiles:
+    active: development
+server:
+  port: 8080
