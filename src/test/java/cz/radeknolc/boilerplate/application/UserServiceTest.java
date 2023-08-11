@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -43,16 +44,16 @@ class UserServiceTest {
     }
 
     @Test
-    void registerNewUser_NotExistingEmail_Void() {
+    void registerNewUser_NotExistingUsername_Void() {
         // given
-        String displayName = "user";
+        String username = "user";
         String email = "user@example.com";
         String password = "mysecretpassword";
 
-        RegisterUserUseCase.Request registerUserDto = new RegisterUserUseCase.Request(displayName, email, password);
+        RegisterUserUseCase.Request registerUserDto = new RegisterUserUseCase.Request(username, email, password);
 
         Role defaultRole = new Role("SOME_ROLE");
-        User expectedUser = new User(null, displayName, email, password, Status.ACTIVE, Set.of(defaultRole));
+        User expectedUser = new User(username, email, password, Status.ACTIVE, Set.of(defaultRole));
 
         String hashedPassword = "myhashedpassword";
         given(passwordEncoder.encode(anyString())).willReturn(hashedPassword);
@@ -72,17 +73,47 @@ class UserServiceTest {
     }
 
     @Test
-    void registerNewUser_AlreadyExistingEmail_Problem() {
+    void registerNewUser_AlreadyExistingUsername_Problem() {
         // given
-        String email = "user@example.com";
-        RegisterUserUseCase.Request registerUserDto = new RegisterUserUseCase.Request("user", email, "mysecretpassword");
+        RegisterUserUseCase.Request registerUserDto = new RegisterUserUseCase.Request("user", "user@example.com", "mysecretpassword");
 
-        given(userRepository.findUserByEmail(anyString())).willReturn(Optional.of(new User()));
+        given(userRepository.findUserByUsername(anyString())).willReturn(Optional.of(new User()));
 
         // when
         // then
         assertThatThrownBy(() -> underTest.registerNewUser(registerUserDto)).isInstanceOf(Problem.class).hasMessage("ACCOUNT_ALREADY_EXISTS");
 
         verify(userRepository, never()).registerNewUser(any());
+    }
+
+    @Test
+    void loadUserByUsername_AlreadyExistingUser_User() {
+        // given
+        String username = "user";
+        User expectedUser = new User(username, "user@example.com", "mysecretpassword", Status.ACTIVE);
+        given(userRepository.findUserByUsername(anyString())).willReturn(Optional.of(expectedUser));
+
+        //when
+        User user = underTest.loadUserByUsername(username);
+
+        //then
+        ArgumentCaptor<String> usernameArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(userRepository).findUserByUsername(usernameArgumentCaptor.capture());
+
+        String capturedUsername = usernameArgumentCaptor.getValue();
+
+        assertThat(capturedUsername).isEqualTo(username);
+        assertThat(user).isEqualTo(expectedUser);
+    }
+
+    @Test
+    void loadUserByUsername_NotExistingUser_UsernameNotFoundException() {
+        // given
+        String username = "user";
+        given(userRepository.findUserByUsername(anyString())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> underTest.loadUserByUsername(username)).isInstanceOf(UsernameNotFoundException.class);
     }
 }

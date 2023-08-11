@@ -1,9 +1,9 @@
 package cz.radeknolc.boilerplate.adapter.out.persistence;
 
-import cz.radeknolc.boilerplate.adapter.out.persistence.role.RoleEntity;
 import cz.radeknolc.boilerplate.adapter.out.persistence.role.RoleEntityRepository;
 import cz.radeknolc.boilerplate.application.RoleRepository;
 import cz.radeknolc.boilerplate.domain.user.Role;
+import cz.radeknolc.boilerplate.infrastructure.converter.RoleConverter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +22,6 @@ public class RoleRepositoryAdapter implements RoleRepository {
     @Transactional
     public Optional<Role> findRoleByName(String name) {
         log.debug("Finding role by name: {}", name);
-        return roleEntityRepository.findByName(name).map(RoleEntity::toModel);
+        return roleEntityRepository.findByName(name).map(RoleConverter::entityToModel);
     }
 }

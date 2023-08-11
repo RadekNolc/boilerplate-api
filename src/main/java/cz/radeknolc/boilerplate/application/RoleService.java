@@ -15,13 +15,13 @@ import java.util.Optional;
 public class RoleService implements DefaultRoleUseCase {
 
     private final RoleRepository roleRepository;
+    private final String DEFAULT_ROLE = AuthoritiesConstants.USER;
 
     @Override
     public Role getDefaultRole() {
-        String defaultRole = AuthoritiesConstants.USER;
-        Optional<Role> role = roleRepository.findRoleByName(defaultRole);
+        Optional<Role> role = roleRepository.findRoleByName(DEFAULT_ROLE);
         return role.orElseThrow(() -> {
-            log.error("An attempt was made to get default role without existing in database '{}' role which was set as default.", defaultRole);
+            log.error("An attempt was made to get default role without existing in database '{}' role which was set as default.", DEFAULT_ROLE);
             return new Problem(ApiProblemCode.DEFAULT_ROLE_NOT_EXISTS);
         });
     }

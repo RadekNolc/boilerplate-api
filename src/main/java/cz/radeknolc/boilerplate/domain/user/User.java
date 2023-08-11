@@ -1,40 +1,66 @@
 package cz.radeknolc.boilerplate.domain.user;
 
-import cz.radeknolc.boilerplate.adapter.out.persistence.user.UserEntity;
-import cz.radeknolc.boilerplate.infrastructure.mapping.MappableModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements MappableModel<UserEntity> {
+public class User implements UserDetails {
 
     private UUID id;
-    private String displayName;
+    private String username;
     private String email;
     private String password;
     private Status status;
-    private Set<Role> roles;
+    private Set<Role> roles = Set.of();
 
-    public User(String displayName, String email, String password, Status status) {
-        this(null, displayName, email, password, status, Set.of());
+    public User(String username, String email, String password, Status status) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+    }
+
+    public User(String username, String email, String password, Status status, Set<Role> roles) {
+        this(username, email, password, status);
+        this.roles = roles;
     }
 
     @Override
-    public UserEntity toEntity() {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(id);
-        userEntity.setDisplayName(displayName);
-        userEntity.setEmail(email);
-        userEntity.setPassword(password);
-        userEntity.setStatus(status);
-        userEntity.setRoles(roles.stream().map(Role::toEntity).collect(Collectors.toSet()));
-        return userEntity;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return status != Status.ACCOUNT_EXPIRED;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return status != Status.LOCKED;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return status != Status.CREDENTIALS_EXPIRED;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return status == Status.ACTIVE;
     }
 }

@@ -17,8 +17,8 @@ public class UserController {
     private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterUserUseCase.Request registerUserDto) {
-        log.debug("Register user: {}", registerUserDto);
-        registerUserUseCase.registerNewUser(registerUserDto);
+    public void register(@RequestBody RegisterUserUseCase.Request request) {
+        log.debug("Register user: {}", request);
+        registerUserUseCase.registerNewUser(request);
     }
 }

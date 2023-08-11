@@ -14,3 +14,6 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+jwt:
+  token:
+    secret: "radeknolc=radeknolc=radeknolc=radeknolc=radeknolc"

@@ -4,6 +4,7 @@ import cz.radeknolc.boilerplate.adapter.out.persistence.user.UserEntity;
 import cz.radeknolc.boilerplate.adapter.out.persistence.user.UserEntityRepository;
 import cz.radeknolc.boilerplate.domain.user.Status;
 import cz.radeknolc.boilerplate.domain.user.User;
+import cz.radeknolc.boilerplate.infrastructure.converter.UserConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ class UserRepositoryAdapterTest {
     @Test
     void registerNewUser_ArgumentCapturing_Captured() {
         // given
-        User user = new User("Example", "user@example.com", "password123", Status.ACTIVE);
+        User user = new User("user", "user@example.com", "password123", Status.ACTIVE);
 
         // when
         underTest.registerNewUser(user);
@@ -41,23 +42,23 @@ class UserRepositoryAdapterTest {
 
         UserEntity capturedUser = userEntityArgumentCaptor.getValue();
 
-        assertThat(capturedUser.toModel()).isEqualTo(user);
+        assertThat(UserConverter.entityToModel(capturedUser)).isEqualTo(user);
     }
 
     @Test
-    void findUserByEmail_ArgumentCapturing_Captured() {
+    void findUserByUsername_ArgumentCapturing_Captured() {
         // given
-        String emailAddress = "user@example.com";
+        String username = "user";
 
         // when
-        underTest.findUserByEmail(emailAddress);
+        underTest.findUserByUsername(username);
 
         // then
         ArgumentCaptor<String> emailArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(userEntityRepository).findByEmail(emailArgumentCaptor.capture());
+        verify(userEntityRepository).findByUsername(emailArgumentCaptor.capture());
 
         String capturedEmail = emailArgumentCaptor.getValue();
 
-        assertThat(capturedEmail).isEqualTo(emailAddress);
+        assertThat(capturedEmail).isEqualTo(username);
     }
 }

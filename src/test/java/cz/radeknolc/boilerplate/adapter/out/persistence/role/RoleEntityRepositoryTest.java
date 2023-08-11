@@ -1,6 +1,7 @@
 package cz.radeknolc.boilerplate.adapter.out.persistence.role;
 
 import cz.radeknolc.boilerplate.domain.user.Role;
+import cz.radeknolc.boilerplate.infrastructure.converter.RoleConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,7 +21,7 @@ class RoleEntityRepositoryTest {
         // given
         String name = "EXAMPLE_ROLE";
         Role role = new Role(name);
-        underTest.save(role.toEntity());
+        underTest.save(RoleConverter.modelToEntity(role));
 
         // when
         Optional<RoleEntity> roleEntity = underTest.findByName(name);
