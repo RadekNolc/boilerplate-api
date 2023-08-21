@@ -41,7 +41,11 @@ class PasswordValidatorTest {
         PasswordValidator passwordValidator = new PasswordValidator();
         passwordValidator.initialize(password);
 
-        assertThat(passwordValidator.isValid(input, constraintValidatorContext)).isEqualTo(valid);
+        // when
+        boolean result = passwordValidator.isValid(input, constraintValidatorContext);
+
+        // then
+        assertThat(result).isEqualTo(valid);
     }
 
     @ParameterizedTest
@@ -53,7 +57,11 @@ class PasswordValidatorTest {
         PasswordValidator passwordValidator = new PasswordValidator();
         passwordValidator.initialize(password);
 
-        assertThat(passwordValidator.isValid(input, constraintValidatorContext)).isEqualTo(valid);
+        // when
+        boolean result = passwordValidator.isValid(input, constraintValidatorContext);
+
+        // then
+        assertThat(result).isEqualTo(valid);
     }
 
     @ParameterizedTest
@@ -65,7 +73,11 @@ class PasswordValidatorTest {
         PasswordValidator passwordValidator = new PasswordValidator();
         passwordValidator.initialize(password);
 
-        assertThat(passwordValidator.isValid(input, constraintValidatorContext)).isEqualTo(valid);
+        // when
+        boolean result = passwordValidator.isValid(input, constraintValidatorContext);
+
+        // then
+        assertThat(result).isEqualTo(valid);
     }
 
     private static Stream<Arguments> provideStringsForMinimumSpecialsTest() {
