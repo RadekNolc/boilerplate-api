@@ -13,7 +13,6 @@ public interface RegisterUserUseCase {
     void registerNewUser(@Valid Request request);
 
     record Request(
-            @NotBlank(message = "NOT_BLANK")
             @Size(min = 4, max = 16, message = "SIZE")
             String username,
 
