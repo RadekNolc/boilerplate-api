@@ -1,6 +1,6 @@
 package cz.radeknolc.appname.auth.infrastructure.jwt.filter;
 
-import cz.radeknolc.appname.auth.application.TokenService;
+import cz.radeknolc.appname.auth.domain.usecase.TokenUseCase;
 import cz.radeknolc.appname.user.domain.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,15 +23,15 @@ import java.io.IOException;
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
-    private final TokenService tokenService;
+    private final TokenUseCase tokenUseCase;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        String token = tokenService.parse(request);
+        String token = tokenUseCase.parse(request);
         if (token != null) {
-            String username = tokenService.getUsername(token);
+            String username = tokenUseCase.getUsername(token);
             userRepository.findUserByUsername(username).ifPresent(user -> {
-                if (tokenService.validate(token, user)) {
+                if (tokenUseCase.validate(token, user)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
