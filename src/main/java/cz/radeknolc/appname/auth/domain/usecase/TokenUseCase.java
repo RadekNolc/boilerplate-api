@@ -13,5 +13,4 @@ public interface TokenUseCase {
     String generate(Authentication authentication);
     boolean isExpired(String token);
     String getUsername(String token);
-    Date getExpiration(String token);
 }

@@ -12,6 +12,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Set;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 
@@ -31,7 +33,13 @@ class UserRepositoryAdapterTest {
     @Test
     void registerNewUser_ArgumentCapturing_Captured() {
         // given
-        User user = new User("user", "user@example.com", "password123", Status.ACTIVE);
+        User user = User.builder()
+                .username("user")
+                .email("user@example.com")
+                .password("password123")
+                .status(Status.ACTIVE)
+                .roles(Set.of())
+                .build();
 
         // when
         underTest.registerNewUser(user);

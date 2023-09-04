@@ -21,7 +21,10 @@ class RoleEntityRepositoryTest {
     void findByName_AlreadyExistingRoleName_RoleEntity() {
         // given
         String name = "EXAMPLE_ROLE";
-        Role role = new Role(name);
+        Role role = Role.builder()
+                .name(name)
+                .build();
+
         underTest.save(RoleMapper.modelToEntity(role));
 
         // when

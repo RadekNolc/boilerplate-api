@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationService implements SignInUseCase {
+public class AuthService implements SignInUseCase {
 
     private final AuthenticationManager authenticationManager;
     private final TokenUseCase tokenUseCase;

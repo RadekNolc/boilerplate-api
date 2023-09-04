@@ -62,8 +62,17 @@ class UserServiceTest {
 
         CreateUserRequest registerUserDto = new CreateUserRequest(username, email, password);
 
-        Role defaultRole = new Role("SOME_ROLE");
-        User expectedUser = new User(username, email, password, Status.ACTIVE, Set.of(defaultRole));
+        Role defaultRole = Role.builder()
+                .name("SOME_ROLE")
+                .build();
+
+        User expectedUser = User.builder()
+                .username(username)
+                .email(email)
+                .password(password)
+                .status(Status.ACTIVE)
+                .roles(Set.of(defaultRole))
+                .build();
 
         String hashedPassword = "myhashedpassword";
         given(passwordEncoder.encode(anyString())).willReturn(hashedPassword);
@@ -116,7 +125,13 @@ class UserServiceTest {
     void loadUserByUsername_AlreadyExistingUser_User() {
         // given
         String username = "user";
-        User expectedUser = new User(username, "user@example.com", "mysecretpassword", Status.ACTIVE);
+        User expectedUser = User.builder()
+                .username(username)
+                .email("user@example.com")
+                .password("mysecretpassword")
+                .status(Status.ACTIVE)
+                .build();
+
         given(userRepository.findUserByUsername(anyString())).willReturn(Optional.of(expectedUser));
 
         //when

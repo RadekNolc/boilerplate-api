@@ -42,6 +42,7 @@ class CreateUserControllerTest {
     void register_NotExistingUser_Success() throws Exception {
         // given
         CreateUserRequest createUserRequest = new CreateUserRequest("user", "user@example.com", "mysecretpassword");
+
         doNothing().when(createUserUseCase).createNewUser(any());
 
         // when
@@ -58,6 +59,7 @@ class CreateUserControllerTest {
         // given
         ProblemCode problemCode = ACCOUNT_ALREADY_EXISTS;
         CreateUserRequest createUserRequest = new CreateUserRequest("user", "user@example.com", "mysecretpassword");
+
         doThrow(new Problem(problemCode)).when(createUserUseCase).createNewUser(any());
 
         // when

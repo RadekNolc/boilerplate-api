@@ -1,7 +1,9 @@
 package cz.radeknolc.appname.user.domain.entity;
 
+import cz.radeknolc.appname.shared.general.domain.entity.BaseEntity;
 import cz.radeknolc.appname.user.domain.enumeration.Status;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,10 +13,11 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails {
+public class User implements BaseEntity, UserDetails {
 
     private UUID id;
     private String username;
@@ -22,15 +25,6 @@ public class User implements UserDetails {
     private String password;
     private Status status;
     private Set<Role> roles = Set.of();
-
-    public User(String username, String email, String password, Status status) {
-        this(null, username, email, password, status, Set.of());
-    }
-
-    public User(String username, String email, String password, Status status, Set<Role> roles) {
-        this(username, email, password, status);
-        this.roles = roles;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

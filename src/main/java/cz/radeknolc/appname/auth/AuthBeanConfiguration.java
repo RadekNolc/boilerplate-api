@@ -1,6 +1,6 @@
 package cz.radeknolc.appname.auth;
 
-import cz.radeknolc.appname.auth.application.AuthenticationService;
+import cz.radeknolc.appname.auth.application.AuthService;
 import cz.radeknolc.appname.auth.domain.usecase.SignInUseCase;
 import cz.radeknolc.appname.auth.application.TokenService;
 import cz.radeknolc.appname.auth.domain.usecase.TokenUseCase;
@@ -28,7 +28,7 @@ public class AuthBeanConfiguration {
 
     @Bean
     SignInUseCase signInToUserUseCase(AuthenticationManager authenticationManager, TokenUseCase tokenUseCase) {
-        return new AuthenticationService(authenticationManager, tokenUseCase);
+        return new AuthService(authenticationManager, tokenUseCase);
     }
 
     @Bean

@@ -32,7 +32,10 @@ class RoleServiceTest {
     @Test
     void getDefaultRole_ExistingDefaultRole_Role() {
         // given
-        Role expectedRole = new Role("EXAMPLE_ROLE");
+        Role expectedRole = Role.builder()
+                .name("EXAMPLE_ROLE")
+                .build();
+
         given(roleRepository.findRoleByName(anyString())).willReturn(Optional.of(expectedRole));
 
         // when

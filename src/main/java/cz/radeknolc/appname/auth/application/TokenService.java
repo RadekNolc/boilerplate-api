@@ -1,11 +1,10 @@
 package cz.radeknolc.appname.auth.application;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import cz.radeknolc.appname.auth.domain.usecase.TokenUseCase;
 import cz.radeknolc.appname.user.domain.entity.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 
-import java.security.Key;
 import java.time.Clock;
+import java.time.Instant;
 import java.util.Date;
-import java.util.function.Function;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,12 +28,11 @@ public class TokenService implements TokenUseCase {
 
     @Override
     public String generate(Authentication authentication) {
-        return Jwts.builder()
-                .setSubject(authentication.getName())
-                .setIssuedAt(new Date(clock.millis()))
-                .setExpiration(new Date(clock.millis() + TOKEN_EXPIRATION_TIME * 1000))
-                .signWith(getSigningKey())
-                .compact();
+        return JWT.create()
+                .withSubject(authentication.getName())
+                .withIssuedAt(Instant.ofEpochMilli(clock.millis()))
+                .withExpiresAt(Instant.ofEpochMilli(clock.millis() + TOKEN_EXPIRATION_TIME * 1000))
+                .sign(Algorithm.HMAC256(secretKey));
     }
 
     @Override
@@ -62,25 +59,12 @@ public class TokenService implements TokenUseCase {
 
     @Override
     public String getUsername(String token) {
-        return getClaim(token, Claims::getSubject);
+        DecodedJWT decodedJWT = JWT.decode(token);
+        return decodedJWT.getSubject();
     }
 
-    @Override
-    public Date getExpiration(String token) {
-        return getClaim(token, Claims::getExpiration);
-    }
-
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    private Claims getAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
-    }
-
-    private <T> T getClaim(String token, Function<Claims, T> resolver) {
-        Claims claims = getAllClaims(token);
-        return resolver.apply(claims);
+    private Date getExpiration(String token) {
+        DecodedJWT decodedJWT = JWT.decode(token);
+        return decodedJWT.getExpiresAt();
     }
 }

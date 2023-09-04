@@ -21,9 +21,6 @@ public class ProblemResponse<T> {
     }
 
     public ProblemResponse(Clock clock, T message, Map<String, String> errors, HttpServletRequest httpServletRequest) {
-        timestamp = clock.millis();
-        this.errors = errors;
-        this.message = message;
-        this.requestUri = httpServletRequest.getRequestURI();
+        this(clock.millis(), message, errors, httpServletRequest.getRequestURI());
     }
 }

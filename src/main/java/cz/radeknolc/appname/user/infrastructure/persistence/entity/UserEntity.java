@@ -1,5 +1,6 @@
 package cz.radeknolc.appname.user.infrastructure.persistence.entity;
 
+import cz.radeknolc.appname.shared.general.domain.entity.BaseEntity;
 import cz.radeknolc.appname.user.domain.enumeration.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity {
+public class UserEntity implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

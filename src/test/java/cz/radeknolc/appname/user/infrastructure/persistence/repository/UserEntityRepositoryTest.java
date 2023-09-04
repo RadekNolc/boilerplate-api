@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -22,7 +23,14 @@ class UserEntityRepositoryTest {
     void findByUsername_AlreadyExistingUsername_UserEntity() {
         // given
         String username = "user";
-        User user = new User(username, "user@example.com", "password123", Status.ACTIVE);
+        User user = User.builder()
+                .username(username)
+                .email("user@example.com")
+                .password("password123")
+                .status(Status.ACTIVE)
+                .roles(Set.of())
+                .build();
+
         underTest.save(UserMapper.modelToEntity(user));
 
         // when
