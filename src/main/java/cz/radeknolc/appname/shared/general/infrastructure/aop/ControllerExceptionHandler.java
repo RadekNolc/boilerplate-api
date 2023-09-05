@@ -1,16 +1,14 @@
 package cz.radeknolc.appname.shared.general.infrastructure.aop;
 
-import cz.radeknolc.appname.shared.problem.ui.dto.response.ProblemResponse;
-import cz.radeknolc.appname.shared.problem.domain.exception.Problem;
 import cz.radeknolc.appname.shared.problem.domain.ProblemCode;
+import cz.radeknolc.appname.shared.problem.domain.exception.Problem;
+import cz.radeknolc.appname.shared.problem.ui.dto.response.ProblemResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -19,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static cz.radeknolc.appname.shared.problem.domain.enumeration.ApiProblemCode.BAD_CREDENTIALS;
 import static cz.radeknolc.appname.shared.problem.domain.enumeration.ApiProblemCode.VALIDATION_ERROR;
 
 @RestControllerAdvice

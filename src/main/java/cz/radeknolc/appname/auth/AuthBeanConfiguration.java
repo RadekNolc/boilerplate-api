@@ -1,8 +1,8 @@
 package cz.radeknolc.appname.auth;
 
 import cz.radeknolc.appname.auth.application.AuthService;
-import cz.radeknolc.appname.auth.domain.usecase.SignInUseCase;
 import cz.radeknolc.appname.auth.application.TokenService;
+import cz.radeknolc.appname.auth.domain.usecase.SignInUseCase;
 import cz.radeknolc.appname.auth.domain.usecase.TokenUseCase;
 import cz.radeknolc.appname.user.application.UserService;
 import cz.radeknolc.appname.user.domain.repository.UserRepository;

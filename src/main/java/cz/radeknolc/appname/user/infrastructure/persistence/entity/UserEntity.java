@@ -1,20 +1,27 @@
 package cz.radeknolc.appname.user.infrastructure.persistence.entity;
 
-import cz.radeknolc.appname.shared.general.domain.entity.BaseEntity;
+import cz.radeknolc.appname.shared.general.domain.entity.AuditedEntity;
 import cz.radeknolc.appname.user.domain.enumeration.Status;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "user")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
-public class UserEntity implements BaseEntity {
+@AllArgsConstructor
+@Entity(name = "user")
+@EntityListeners(AuditingEntityListener.class)
+public class UserEntity implements AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,4 +39,16 @@ public class UserEntity implements BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+    @CreatedBy
+    @Column(updatable = false)
+    private String createdBy;
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime updatedAt;
+    @LastModifiedBy
+    @Column(insertable = false)
+    private String updatedBy;
 }

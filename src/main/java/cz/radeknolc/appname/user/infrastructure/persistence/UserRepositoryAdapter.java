@@ -1,9 +1,9 @@
 package cz.radeknolc.appname.user.infrastructure.persistence;
 
-import cz.radeknolc.appname.user.infrastructure.persistence.repository.UserEntityRepository;
-import cz.radeknolc.appname.user.domain.repository.UserRepository;
 import cz.radeknolc.appname.user.domain.entity.User;
+import cz.radeknolc.appname.user.domain.repository.UserRepository;
 import cz.radeknolc.appname.user.infrastructure.persistence.mapper.UserMapper;
+import cz.radeknolc.appname.user.infrastructure.persistence.repository.UserEntityRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

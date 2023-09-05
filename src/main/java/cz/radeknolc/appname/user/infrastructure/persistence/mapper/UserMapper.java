@@ -1,31 +1,41 @@
 package cz.radeknolc.appname.user.infrastructure.persistence.mapper;
 
-import cz.radeknolc.appname.user.infrastructure.persistence.entity.UserEntity;
 import cz.radeknolc.appname.user.domain.entity.User;
+import cz.radeknolc.appname.user.infrastructure.persistence.entity.UserEntity;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 public class UserMapper {
 
-    public static UserEntity modelToEntity(User user) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(user.getId());
-        userEntity.setUsername(user.getUsername());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(user.getPassword());
-        userEntity.setStatus(user.getStatus());
-        userEntity.setRoles(user.getRoles().stream().map(RoleMapper::modelToEntity).collect(Collectors.toSet()));
-        return userEntity;
+    public static UserEntity modelToEntity(User source) {
+        return UserEntity.builder()
+                .id(source.getId())
+                .username(source.getUsername())
+                .email(source.getEmail())
+                .password(source.getPassword())
+                .status(source.getStatus())
+                .roles(source.getRoles().stream().map(RoleMapper::modelToEntity).collect(Collectors.toSet()))
+                .createdAt(source.getCreatedAt())
+                .createdBy(source.getCreatedBy())
+                .updatedAt(source.getUpdatedAt())
+                .updatedBy(source.getUpdatedBy())
+                .build();
     }
 
-    public static User entityToModel(UserEntity userEntity) {
-        User user = new User();
-        user.setId(userEntity.getId());
-        user.setUsername(userEntity.getUsername());
-        user.setEmail(userEntity.getEmail());
-        user.setPassword(userEntity.getPassword());
-        user.setStatus(userEntity.getStatus());
-        user.setRoles(userEntity.getRoles().stream().map(RoleMapper::entityToModel).collect(Collectors.toSet()));
-        return user;
+    public static User entityToModel(UserEntity source) {
+        return User.builder()
+                .id(source.getId())
+                .username(source.getUsername())
+                .email(source.getEmail())
+                .password(source.getPassword())
+                .status(source.getStatus())
+                .roles(source.getRoles().stream().map(RoleMapper::entityToModel).collect(Collectors.toSet()))
+                .createdAt(source.getCreatedAt())
+                .createdBy(source.getCreatedBy())
+                .updatedAt(source.getUpdatedAt())
+                .updatedBy(source.getUpdatedBy())
+                .build();
     }
 }

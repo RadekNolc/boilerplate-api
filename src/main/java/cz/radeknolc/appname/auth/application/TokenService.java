@@ -24,14 +24,15 @@ public class TokenService implements TokenUseCase {
 
     @Value("${jwt.token.secret}")
     private String secretKey;
-    private static final long TOKEN_EXPIRATION_TIME = 5 * 60 * 60;
+    private static final long TOKEN_EXPIRATION_TIME = 5 * 60 * 60 * 1000; // in milliseconds
 
     @Override
     public String generate(Authentication authentication) {
+        log.debug("Generating JWT token: Subject {}, expiration in {} milliseconds", authentication.getName(), TOKEN_EXPIRATION_TIME);
         return JWT.create()
                 .withSubject(authentication.getName())
                 .withIssuedAt(Instant.ofEpochMilli(clock.millis()))
-                .withExpiresAt(Instant.ofEpochMilli(clock.millis() + TOKEN_EXPIRATION_TIME * 1000))
+                .withExpiresAt(Instant.ofEpochMilli(clock.millis() + TOKEN_EXPIRATION_TIME))
                 .sign(Algorithm.HMAC256(secretKey));
     }
 

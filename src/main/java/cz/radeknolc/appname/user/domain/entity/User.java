@@ -1,6 +1,6 @@
 package cz.radeknolc.appname.user.domain.entity;
 
-import cz.radeknolc.appname.shared.general.domain.entity.BaseEntity;
+import cz.radeknolc.appname.shared.general.domain.entity.AuditedEntity;
 import cz.radeknolc.appname.user.domain.enumeration.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,15 +9,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
-@Builder
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class User implements BaseEntity, UserDetails {
+@AllArgsConstructor
+public class User implements AuditedEntity, UserDetails {
 
     private UUID id;
     private String username;
@@ -25,6 +26,10 @@ public class User implements BaseEntity, UserDetails {
     private String password;
     private Status status;
     private Set<Role> roles = Set.of();
+    private LocalDateTime createdAt;
+    private String createdBy;
+    private LocalDateTime updatedAt;
+    private String updatedBy;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -2,19 +2,17 @@ package cz.radeknolc.appname.user.infrastructure.persistence.entity;
 
 import cz.radeknolc.appname.shared.general.domain.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "role")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "role")
 public class RoleEntity implements BaseEntity {
 
     @Id

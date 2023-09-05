@@ -1,12 +1,12 @@
 package cz.radeknolc.appname.user.application;
 
-import cz.radeknolc.appname.user.domain.usecase.DefaultRoleUseCase;
-import cz.radeknolc.appname.user.domain.usecase.CreateUserUseCase;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
-import cz.radeknolc.appname.user.domain.entity.User;
 import cz.radeknolc.appname.shared.problem.domain.enumeration.ApiProblemCode;
 import cz.radeknolc.appname.shared.problem.domain.exception.Problem;
+import cz.radeknolc.appname.user.domain.entity.User;
+import cz.radeknolc.appname.user.domain.enumeration.Status;
 import cz.radeknolc.appname.user.domain.repository.UserRepository;
+import cz.radeknolc.appname.user.domain.usecase.CreateUserUseCase;
+import cz.radeknolc.appname.user.domain.usecase.DefaultRoleUseCase;
 import cz.radeknolc.appname.user.ui.dto.request.CreateUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

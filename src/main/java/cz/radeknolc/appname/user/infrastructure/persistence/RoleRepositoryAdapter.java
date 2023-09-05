@@ -1,9 +1,9 @@
 package cz.radeknolc.appname.user.infrastructure.persistence;
 
-import cz.radeknolc.appname.user.infrastructure.persistence.repository.RoleEntityRepository;
-import cz.radeknolc.appname.user.domain.repository.RoleRepository;
 import cz.radeknolc.appname.user.domain.entity.Role;
+import cz.radeknolc.appname.user.domain.repository.RoleRepository;
 import cz.radeknolc.appname.user.infrastructure.persistence.mapper.RoleMapper;
+import cz.radeknolc.appname.user.infrastructure.persistence.repository.RoleEntityRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

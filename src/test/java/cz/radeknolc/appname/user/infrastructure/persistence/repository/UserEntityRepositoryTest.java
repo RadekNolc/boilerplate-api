@@ -1,12 +1,14 @@
 package cz.radeknolc.appname.user.infrastructure.persistence.repository;
 
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.auth.infrastructure.jwt.audit.AuditorAware;
 import cz.radeknolc.appname.user.domain.entity.User;
-import cz.radeknolc.appname.user.infrastructure.persistence.mapper.UserMapper;
+import cz.radeknolc.appname.user.domain.enumeration.Status;
 import cz.radeknolc.appname.user.infrastructure.persistence.entity.UserEntity;
+import cz.radeknolc.appname.user.infrastructure.persistence.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.Optional;
 import java.util.Set;
@@ -14,6 +16,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
+@Import(AuditorAware.class)
 class UserEntityRepositoryTest {
 
     @Autowired

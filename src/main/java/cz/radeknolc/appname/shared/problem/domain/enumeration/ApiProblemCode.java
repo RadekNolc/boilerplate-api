@@ -8,6 +8,7 @@ public enum ApiProblemCode implements ProblemCode {
     ACCOUNT_EXPIRED,
     ACCOUNT_LOCKED,
     CREDENTIALS_EXPIRED,
+    UNAUTHORIZED,
     ACCESS_DENIED,
     VALIDATION_ERROR,
     ACCOUNT_ALREADY_EXISTS,

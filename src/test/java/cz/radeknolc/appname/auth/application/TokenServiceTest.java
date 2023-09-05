@@ -1,9 +1,7 @@
 package cz.radeknolc.appname.auth.application;
 
 import cz.radeknolc.appname.user.domain.entity.User;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -120,7 +118,7 @@ class TokenServiceTest {
     @Test
     void parse_ValidAuthorizationHeader_Token() {
         // given
-        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        String token = "Just some token";
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer " + token);
 
@@ -134,7 +132,7 @@ class TokenServiceTest {
     @Test
     void parse_InvalidAuthorizationHeader_Null() {
         // given
-        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        String token = "Just some token";
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", token);
 

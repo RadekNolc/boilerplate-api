@@ -1,5 +1,8 @@
 package cz.radeknolc.appname.shared.general.domain.entity;
 
+import java.util.UUID;
+
 public interface BaseEntity {
-    long getId();
+    UUID getId();
+    void setId(UUID uuid);
 }

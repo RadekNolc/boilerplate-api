@@ -4,8 +4,6 @@ import cz.radeknolc.appname.user.domain.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
-import java.util.Date;
-
 public interface TokenUseCase {
 
     String parse(HttpServletRequest httpServletRequest);

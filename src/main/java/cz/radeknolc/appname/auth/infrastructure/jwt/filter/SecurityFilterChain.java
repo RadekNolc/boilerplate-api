@@ -1,6 +1,7 @@
 package cz.radeknolc.appname.auth.infrastructure.jwt.filter;
 
-import cz.radeknolc.appname.auth.infrastructure.jwt.AuthenticationEntryPoint;
+import cz.radeknolc.appname.auth.infrastructure.jwt.handler.AccessDeniedHandler;
+import cz.radeknolc.appname.auth.infrastructure.jwt.handler.AuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -20,13 +21,13 @@ public class SecurityFilterChain {
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationTokenFilter authenticationTokenFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final AccessDeniedHandler accessDeniedHandler;
 
     @Bean
     org.springframework.security.web.SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors(Customizer.withDefaults()); // Setting-up CORS
         httpSecurity.csrf(AbstractHttpConfigurer::disable); // Disabling CSRF - Not needed because of using JWT
 
-        httpSecurity.exceptionHandling(handler -> handler.authenticationEntryPoint(authenticationEntryPoint));
         httpSecurity.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         httpSecurity.authorizeHttpRequests(request -> request
@@ -35,6 +36,11 @@ public class SecurityFilterChain {
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/**").denyAll()
         );
+
+        httpSecurity.exceptionHandling(handler -> {
+            handler.authenticationEntryPoint(authenticationEntryPoint);
+            handler.accessDeniedHandler(accessDeniedHandler);
+        });
 
         httpSecurity.authenticationProvider(authenticationProvider);
         httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);

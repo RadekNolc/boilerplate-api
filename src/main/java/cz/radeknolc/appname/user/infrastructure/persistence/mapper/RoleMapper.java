@@ -1,21 +1,21 @@
 package cz.radeknolc.appname.user.infrastructure.persistence.mapper;
 
-import cz.radeknolc.appname.user.infrastructure.persistence.entity.RoleEntity;
 import cz.radeknolc.appname.user.domain.entity.Role;
+import cz.radeknolc.appname.user.infrastructure.persistence.entity.RoleEntity;
 
 public class RoleMapper {
 
-    public static RoleEntity modelToEntity(Role role) {
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setId(role.getId());
-        roleEntity.setName(role.getName());
-        return roleEntity;
+    public static RoleEntity modelToEntity(Role source) {
+        return RoleEntity.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .build();
     }
 
-    public static Role entityToModel(RoleEntity roleEntity) {
-        Role role = new Role();
-        role.setId(roleEntity.getId());
-        role.setName(roleEntity.getName());
-        return role;
+    public static Role entityToModel(RoleEntity source) {
+        return Role.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .build();
     }
 }

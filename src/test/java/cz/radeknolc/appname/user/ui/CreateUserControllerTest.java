@@ -5,6 +5,10 @@ import cz.radeknolc.appname.shared.problem.domain.ProblemCode;
 import cz.radeknolc.appname.shared.problem.domain.exception.Problem;
 import cz.radeknolc.appname.user.domain.usecase.CreateUserUseCase;
 import cz.radeknolc.appname.user.ui.dto.request.CreateUserRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,7 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Set;
+
 import static cz.radeknolc.appname.shared.problem.domain.enumeration.ApiProblemCode.ACCOUNT_ALREADY_EXISTS;
+import static cz.radeknolc.appname.shared.problem.domain.enumeration.ApiProblemCode.VALIDATION_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -70,5 +77,26 @@ class CreateUserControllerTest {
         // then
         response.andExpect(status().isBadRequest());
         response.andExpect(jsonPath("$.message").value(problemCode.toString()));
+    }
+
+    @Test
+    void register_InvalidInputValue_HandledConstraintViolation() throws Exception {
+        // given
+        CreateUserRequest createUserRequest = new CreateUserRequest("", "", "");
+
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<CreateUserRequest>> constraintViolations = validator.validate(createUserRequest);
+
+        doThrow(new ConstraintViolationException(constraintViolations)).when(createUserUseCase).createNewUser(any());
+
+        // when
+        ResultActions response = mockMvc.perform(post("/api/user/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createUserRequest)));
+
+        // then
+        response.andExpect(status().isUnprocessableEntity());
+        response.andExpect(jsonPath("$.message").value(VALIDATION_ERROR.toString()));
+        response.andExpect(jsonPath("$.errors.length()").value(3));
     }
 }
