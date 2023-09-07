@@ -32,7 +32,7 @@ public class SecurityFilterChain {
 
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers("/api/authentication/signIn").anonymous()
-                .requestMatchers("/api/user/create").anonymous()
+                .requestMatchers("/api/user/create").hasAuthority("ADMIN")
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/**").denyAll()
         );
