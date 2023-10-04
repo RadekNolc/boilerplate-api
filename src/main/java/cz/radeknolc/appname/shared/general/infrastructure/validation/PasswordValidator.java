@@ -5,18 +5,27 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class PasswordValidator implements ConstraintValidator<Password, CharSequence> {
 
-    private String regex;
+    private int minCapitals;
+    private int minNumbers;
+    private int minSpecials;
+    private int minSize;
 
     @Override
     public void initialize(Password constraintAnnotation) {
-        int minCapitals = constraintAnnotation.minCapitals();
-        int minNumbers = constraintAnnotation.minNumbers();
-        int minSpecials = constraintAnnotation.minSpecials();
-        regex = "^(?=(.*[-\\#\\$\\.\\%\\&\\*\\+\\@]){" + minSpecials + ",})(?=(.*\\d){" + minNumbers + ",})(?=(.*[A-Z]){" + minCapitals + ",}).*$";
+        this.minCapitals = constraintAnnotation.minCapitals();
+        this.minNumbers = constraintAnnotation.minNumbers();
+        this.minSpecials = constraintAnnotation.minSpecials();
+        this.minSize = constraintAnnotation.minSize();
     }
 
     @Override
     public boolean isValid(CharSequence charSequence, ConstraintValidatorContext constraintValidatorContext) {
-        return charSequence.toString().matches(regex);
+        String regex = "^(?=(.*[-\\#\\$\\.\\%\\&\\*\\+\\@]){" + minSpecials + ",})(?=(.*\\d){" + minNumbers + ",})(?=(.*[A-Z]){" + minCapitals + ",}).*$";
+        if (charSequence == null) {
+            return false;
+        }
+
+        String password = charSequence.toString();
+        return password.length() >= minSize && password.matches(regex);
     }
 }

@@ -13,6 +13,7 @@ public @interface Password {
     String message() default "PASSWORD";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
+    int minSize() default 8;
     int minCapitals() default 0;
     int minNumbers() default 0;
     int minSpecials() default 0;

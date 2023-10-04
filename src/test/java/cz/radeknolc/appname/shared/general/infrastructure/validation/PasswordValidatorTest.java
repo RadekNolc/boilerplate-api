@@ -2,6 +2,7 @@ package cz.radeknolc.appname.shared.general.infrastructure.validation;
 
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,9 +28,26 @@ class PasswordValidatorTest {
 
     @BeforeEach
     void setUp() {
+        given(password.minSize()).willReturn(0);
         given(password.minSpecials()).willReturn(0);
         given(password.minNumbers()).willReturn(0);
         given(password.minCapitals()).willReturn(0);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideStringsForMinimumSizeTest")
+    void isValid_MinimumSize_Validated(String input, boolean valid) {
+        // given
+        given(password.minSize()).willReturn(8);
+
+        PasswordValidator passwordValidator = new PasswordValidator();
+        passwordValidator.initialize(password);
+
+        // when
+        boolean result = passwordValidator.isValid(input, constraintValidatorContext);
+
+        // then
+        assertThat(result).isEqualTo(valid);
     }
 
     @ParameterizedTest
@@ -78,6 +96,27 @@ class PasswordValidatorTest {
 
         // then
         assertThat(result).isEqualTo(valid);
+    }
+
+    @Test
+    void isValid_NullString_False() {
+        // given
+        PasswordValidator passwordValidator = new PasswordValidator();
+        passwordValidator.initialize(password);
+
+        // when
+        boolean result = passwordValidator.isValid(null, constraintValidatorContext);
+
+        // then
+        assertThat(result).isFalse();
+    }
+
+    private static Stream<Arguments> provideStringsForMinimumSizeTest() {
+        return Stream.of(
+                Arguments.of("abcdefj", false),
+                Arguments.of("abcdefgj", true),
+                Arguments.of("abcdefghi", true)
+        );
     }
 
     private static Stream<Arguments> provideStringsForMinimumSpecialsTest() {
