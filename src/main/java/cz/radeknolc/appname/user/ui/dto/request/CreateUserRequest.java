@@ -9,12 +9,11 @@ import jakarta.validation.constraints.Size;
 
 public record CreateUserRequest(
         @NotExists(entity = UserEntity.class, column = "username")
-        @Size(min = 4, max = 16, message = "SIZE")
+        @Size(min = 4, max = 32, message = "SIZE")
         String username,
 
         @NotBlank(message = "NOT_BLANK")
         @Email(message = "EMAIL")
-        @Size(max = 64, message = "SIZE")
         String email,
 
         @Password(minSize = 12, minCapitals = 1, minNumbers = 1, minSpecials = 1)
