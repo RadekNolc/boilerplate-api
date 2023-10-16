@@ -3,6 +3,7 @@ package cz.radeknolc.appname.auth.application;
 import cz.radeknolc.appname.auth.domain.usecase.TokenUseCase;
 import cz.radeknolc.appname.auth.ui.dto.request.SignInRequest;
 import cz.radeknolc.appname.auth.ui.dto.response.SignInResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.stream.Stream;
 
@@ -39,6 +41,11 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() {
         underTest = new AuthService(authenticationManager, tokenUseCase);
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
