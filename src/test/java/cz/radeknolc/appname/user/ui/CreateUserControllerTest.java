@@ -2,7 +2,9 @@ package cz.radeknolc.appname.user.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.radeknolc.appname.auth.domain.usecase.TokenUseCase;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import cz.radeknolc.appname.user.infrastructure.persistence.entity.RoleEntity;
 import cz.radeknolc.appname.user.infrastructure.persistence.entity.UserEntity;
 import cz.radeknolc.appname.user.infrastructure.persistence.repository.RoleEntityRepository;
@@ -77,7 +79,9 @@ class CreateUserControllerTest {
                 .username(NORMAL_USER_USERNAME)
                 .password(passwordEncoder.encode(password))
                 .email("user@example.com")
-                .status(Status.ACTIVE)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .roles(Set.of(defaultRole))
                 .build();
 
@@ -85,7 +89,9 @@ class CreateUserControllerTest {
                 .username(adminUserUsername)
                 .password(passwordEncoder.encode(password))
                 .email("admin@example.com")
-                .status(Status.ACTIVE)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .roles(Set.of(adminRole))
                 .build();
 

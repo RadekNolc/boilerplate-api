@@ -1,7 +1,9 @@
 package cz.radeknolc.appname.user.infrastructure.persistence;
 
 import cz.radeknolc.appname.user.domain.entity.User;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import cz.radeknolc.appname.user.infrastructure.persistence.entity.UserEntity;
 import cz.radeknolc.appname.user.infrastructure.persistence.mapper.UserMapper;
 import cz.radeknolc.appname.user.infrastructure.persistence.repository.UserEntityRepository;
@@ -37,7 +39,9 @@ class UserRepositoryAdapterTest {
                 .username("user")
                 .email("user@example.com")
                 .password("password123")
-                .status(Status.ACTIVE)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .roles(Set.of())
                 .build();
 

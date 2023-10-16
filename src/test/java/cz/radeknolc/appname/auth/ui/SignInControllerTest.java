@@ -6,7 +6,9 @@ import cz.radeknolc.appname.auth.domain.usecase.TokenUseCase;
 import cz.radeknolc.appname.auth.ui.dto.request.SignInRequest;
 import cz.radeknolc.appname.shared.problem.domain.ProblemCode;
 import cz.radeknolc.appname.shared.problem.domain.enumeration.ApiProblemCode;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import cz.radeknolc.appname.user.infrastructure.persistence.entity.UserEntity;
 import cz.radeknolc.appname.user.infrastructure.persistence.repository.UserEntityRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -69,7 +71,9 @@ class SignInControllerTest {
                 .password(passwordEncoder.encode(USER_PASSWORD))
                 .email("user@example.com")
                 .roles(Set.of())
-                .status(Status.ACTIVE)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .build();
 
         UserEntity inactiveUserEntity = UserEntity.builder()
@@ -77,7 +81,9 @@ class SignInControllerTest {
                 .password(passwordEncoder.encode(USER_PASSWORD))
                 .email("inactive@example.com")
                 .roles(Set.of())
-                .status(Status.INACTIVE)
+                .activityStatus(ActivityStatus.INACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .build();
 
         UserEntity expiredUserEntity = UserEntity.builder()
@@ -85,7 +91,9 @@ class SignInControllerTest {
                 .password(passwordEncoder.encode(USER_PASSWORD))
                 .email("expired@example.com")
                 .roles(Set.of())
-                .status(Status.ACCOUNT_EXPIRED)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.EXPIRED)
+                .credentialsStatus(CredentialsStatus.OK)
                 .build();
 
         UserEntity lockedUserEntity = UserEntity.builder()
@@ -93,7 +101,9 @@ class SignInControllerTest {
                 .password(passwordEncoder.encode(USER_PASSWORD))
                 .email("locked@example.com")
                 .roles(Set.of())
-                .status(Status.LOCKED)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.LOCKED)
+                .credentialsStatus(CredentialsStatus.OK)
                 .build();
 
         UserEntity expiredCredentialsUserEntity = UserEntity.builder()
@@ -101,7 +111,9 @@ class SignInControllerTest {
                 .password(passwordEncoder.encode(USER_PASSWORD))
                 .email("expiredCredentials@example.com")
                 .roles(Set.of())
-                .status(Status.CREDENTIALS_EXPIRED)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.EXPIRED)
                 .build();
 
         userEntityRepository.saveAll(List.of(userEntity, inactiveUserEntity, expiredUserEntity, lockedUserEntity, expiredCredentialsUserEntity));

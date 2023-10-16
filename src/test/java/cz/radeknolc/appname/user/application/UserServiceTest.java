@@ -3,7 +3,9 @@ package cz.radeknolc.appname.user.application;
 import cz.radeknolc.appname.shared.problem.domain.exception.Problem;
 import cz.radeknolc.appname.user.domain.entity.Role;
 import cz.radeknolc.appname.user.domain.entity.User;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import cz.radeknolc.appname.user.domain.repository.UserRepository;
 import cz.radeknolc.appname.user.domain.usecase.DefaultRoleUseCase;
 import cz.radeknolc.appname.user.ui.dto.request.CreateUserRequest;
@@ -63,7 +65,9 @@ class UserServiceTest {
                 .username(username)
                 .email(email)
                 .password(password)
-                .status(Status.ACTIVE)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .roles(Set.of(defaultRole))
                 .build();
 
@@ -106,7 +110,9 @@ class UserServiceTest {
                 .username(username)
                 .email("user@example.com")
                 .password("mysecretpassword")
-                .status(Status.ACTIVE)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .build();
 
         given(userRepository.findUserByUsername(anyString())).willReturn(Optional.of(expectedUser));

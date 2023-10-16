@@ -1,7 +1,9 @@
 package cz.radeknolc.appname.user.domain.entity;
 
 import cz.radeknolc.appname.shared.general.domain.entity.AuditedEntity;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +26,9 @@ public class User implements AuditedEntity, UserDetails {
     private String username;
     private String email;
     private String password;
-    private Status status;
+    private ActivityStatus activityStatus;
+    private AccountStatus accountStatus;
+    private CredentialsStatus credentialsStatus;
     private Set<Role> roles = Set.of();
     private LocalDateTime createdAt;
     private String createdBy;
@@ -43,21 +47,21 @@ public class User implements AuditedEntity, UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return status != Status.ACCOUNT_EXPIRED;
+        return accountStatus != AccountStatus.EXPIRED;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return status != Status.LOCKED;
+        return accountStatus != AccountStatus.LOCKED;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return status != Status.CREDENTIALS_EXPIRED;
+        return credentialsStatus != CredentialsStatus.EXPIRED;
     }
 
     @Override
     public boolean isEnabled() {
-        return status == Status.ACTIVE;
+        return activityStatus == ActivityStatus.ACTIVE;
     }
 }

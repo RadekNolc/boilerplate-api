@@ -3,7 +3,9 @@ package cz.radeknolc.appname.user.application;
 import cz.radeknolc.appname.shared.problem.domain.enumeration.ApiProblemCode;
 import cz.radeknolc.appname.shared.problem.domain.exception.Problem;
 import cz.radeknolc.appname.user.domain.entity.User;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import cz.radeknolc.appname.user.domain.repository.UserRepository;
 import cz.radeknolc.appname.user.domain.usecase.CreateUserUseCase;
 import cz.radeknolc.appname.user.domain.usecase.DefaultRoleUseCase;
@@ -37,8 +39,9 @@ public class UserService implements CreateUserUseCase, UserDetailsService {
         user.setEmail(createUserRequest.email());
         user.setRoles(Set.of(defaultRoleUseCase.getDefaultRole()));
         user.setPassword(getEncryptedPassword(createUserRequest));
-        user.setStatus(Status.ACTIVE);
-
+        user.setActivityStatus(ActivityStatus.ACTIVE);
+        user.setAccountStatus(AccountStatus.OK);
+        user.setCredentialsStatus(CredentialsStatus.OK);
         userRepository.registerNewUser(user);
     }
 

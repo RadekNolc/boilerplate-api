@@ -2,7 +2,9 @@ package cz.radeknolc.appname.user.infrastructure.persistence.repository;
 
 import cz.radeknolc.appname.auth.infrastructure.jwt.audit.AuditorAware;
 import cz.radeknolc.appname.user.domain.entity.User;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import cz.radeknolc.appname.user.infrastructure.persistence.entity.UserEntity;
 import cz.radeknolc.appname.user.infrastructure.persistence.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,9 @@ class UserEntityRepositoryTest {
                 .username(username)
                 .email("user@example.com")
                 .password("password123")
-                .status(Status.ACTIVE)
+                .activityStatus(ActivityStatus.ACTIVE)
+                .accountStatus(AccountStatus.OK)
+                .credentialsStatus(CredentialsStatus.OK)
                 .roles(Set.of())
                 .build();
 

@@ -1,7 +1,9 @@
 package cz.radeknolc.appname.user.infrastructure.persistence.entity;
 
 import cz.radeknolc.appname.shared.general.domain.entity.AuditedEntity;
-import cz.radeknolc.appname.user.domain.enumeration.Status;
+import cz.radeknolc.appname.user.domain.enumeration.AccountStatus;
+import cz.radeknolc.appname.user.domain.enumeration.ActivityStatus;
+import cz.radeknolc.appname.user.domain.enumeration.CredentialsStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +37,11 @@ public class UserEntity implements AuditedEntity {
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private ActivityStatus activityStatus;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus;
+    @Enumerated(EnumType.STRING)
+    private CredentialsStatus credentialsStatus;
     @ManyToMany(targetEntity = RoleEntity.class, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "user_role_map",
