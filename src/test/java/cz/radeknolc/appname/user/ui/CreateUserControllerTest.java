@@ -32,7 +32,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CreateUserControllerIntegrationTest {
+class CreateUserControllerTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -124,7 +124,7 @@ class CreateUserControllerIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidRequestsForUserRegistration")
+    @MethodSource("provideInvalidInputsForUserSignIn")
     void register_InvalidInputValue_HandledException(CreateUserRequest createUserRequest, List<String[]> violationData) throws Exception {
         // given
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -181,7 +181,7 @@ class CreateUserControllerIntegrationTest {
         assertThat(response.getBody()).contains("\"message\":\"ACCESS_DENIED\"");
     }
 
-    private static Stream<Arguments> provideInvalidRequestsForUserRegistration() {
+    private static Stream<Arguments> provideInvalidInputsForUserSignIn() {
         String validUsername = "newuser";
         String validEmail = "newuser@example.com";
         String validPassword = "hvw^18lnpI8O$YwF0J*6SPgVGJ";
@@ -198,7 +198,7 @@ class CreateUserControllerIntegrationTest {
                 ), // Minimal length of username
 
                 Arguments.of(
-                        new CreateUserRequest("loremipsumdolorsit", validEmail, validPassword),
+                        new CreateUserRequest("loremipsumdolorsitametconsectetur", validEmail, validPassword),
                         List.of("username", "SIZE")
                 ), // Maximum length of username
 
@@ -213,9 +213,9 @@ class CreateUserControllerIntegrationTest {
                 ), // Invalid e-mail format
 
                 Arguments.of(
-                        new CreateUserRequest(validUsername, "NFUtAlw9u0yAicRoSCUB1MNBLmBdiZYBY8tZrp8PFLDsIIyVZcNXlnw@example.com", validPassword),
-                        List.of("email", "SIZE")
-                ), // Maximum length of e-mail
+                        new CreateUserRequest(validUsername, "loremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsecteturloremipsumdolorsitametconsectetur@example.com", validPassword),
+                        List.of("email", "EMAIL")
+                ), // Over maximum length of e-mail address
 
                 Arguments.of(
                         new CreateUserRequest(validUsername, validEmail, ""),
