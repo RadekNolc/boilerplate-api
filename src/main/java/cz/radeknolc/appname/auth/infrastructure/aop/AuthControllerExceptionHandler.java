@@ -27,7 +27,7 @@ public class AuthControllerExceptionHandler {
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ProblemResponse<ProblemCode>> handleDisabledException(HttpServletRequest httpServletRequest) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ProblemResponse<>(clock, ACCOUNT_DISABLED, httpServletRequest));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ProblemResponse<>(clock, ACCOUNT_INACTIVE, httpServletRequest));
     }
 
     @ExceptionHandler(AccountExpiredException.class)

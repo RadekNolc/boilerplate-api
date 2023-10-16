@@ -4,7 +4,7 @@ import cz.radeknolc.appname.shared.problem.domain.ProblemCode;
 
 public enum ApiProblemCode implements ProblemCode {
     BAD_CREDENTIALS,
-    ACCOUNT_DISABLED,
+    ACCOUNT_INACTIVE,
     ACCOUNT_EXPIRED,
     ACCOUNT_LOCKED,
     CREDENTIALS_EXPIRED,
