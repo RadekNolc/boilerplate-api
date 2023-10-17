@@ -8,11 +8,11 @@
 		<version>3.1.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>cz.radeknolc</groupId>
-	<artifactId>appname</artifactId>
+	<groupId>com.radeknolc</groupId>
+	<artifactId>apiname</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>appname</name>
-	<description>Boilerplate project for Spring Boot</description>
+	<name>apiname</name>
+	<description>Boilerplate API for projects coded in Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 		<jwt.version>4.4.0</jwt.version>
