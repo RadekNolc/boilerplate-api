@@ -1,9 +1,9 @@
 package com.radeknolc.apiname.user.infrastructure.persistence;
 
 import com.radeknolc.apiname.user.domain.entity.User;
+import com.radeknolc.apiname.user.domain.repository.UserRepository;
 import com.radeknolc.apiname.user.infrastructure.persistence.mapper.UserMapper;
 import com.radeknolc.apiname.user.infrastructure.persistence.repository.UserEntityRepository;
-import com.radeknolc.apiname.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +20,8 @@ public class UserRepositoryAdapter implements UserRepository {
 
     @Override
     @Transactional
-    public void registerNewUser(User user) {
-        log.debug("Registering new user: {}", user);
+    public void createUser(User user) {
+        log.debug("Creating new user: {}", user);
         userEntityRepository.save(UserMapper.modelToEntity(user));
     }
 

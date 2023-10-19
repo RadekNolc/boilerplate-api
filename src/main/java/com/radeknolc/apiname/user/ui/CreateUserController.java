@@ -1,7 +1,7 @@
 package com.radeknolc.apiname.user.ui;
 
-import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import com.radeknolc.apiname.user.domain.usecase.CreateUserUseCase;
+import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +18,8 @@ public class CreateUserController {
     private final CreateUserUseCase createUserUseCase;
 
     @PostMapping("/create")
-    public void create(@RequestBody CreateUserRequest createUserRequest) {
+    public void createUser(@RequestBody CreateUserRequest createUserRequest) {
         log.debug("Create user: {}", createUserRequest);
-        createUserUseCase.createNewUser(createUserRequest);
+        createUserUseCase.createUser(createUserRequest);
     }
 }

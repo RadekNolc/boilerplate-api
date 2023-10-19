@@ -6,9 +6,9 @@ import com.radeknolc.apiname.user.domain.entity.User;
 import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
 import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
 import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;
-import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import com.radeknolc.apiname.user.domain.repository.UserRepository;
 import com.radeknolc.apiname.user.domain.usecase.DefaultRoleUseCase;
+import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,13 +49,13 @@ class UserServiceTest {
     }
 
     @Test
-    void registerNewUser_NotExistingUsername_Void() {
+    void createUser_NotExistingUsername_Void() {
         // given
         String username = "user";
         String email = "user@example.com";
         String password = "mysecretpassword";
 
-        CreateUserRequest registerUserDto = new CreateUserRequest(username, email, password);
+        CreateUserRequest createUserRequest = new CreateUserRequest(username, email, password);
 
         Role defaultRole = Role.builder()
                 .name("SOME_ROLE")
@@ -76,11 +76,11 @@ class UserServiceTest {
         given(defaultRoleUseCase.getDefaultRole()).willReturn(defaultRole);
 
         // when
-        underTest.createNewUser(registerUserDto);
+        underTest.createUser(createUserRequest);
 
         // then
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).registerNewUser(userArgumentCaptor.capture());
+        verify(userRepository).createUser(userArgumentCaptor.capture());
 
         User capturedUser = userArgumentCaptor.getValue();
 
@@ -89,17 +89,17 @@ class UserServiceTest {
     }
 
     @Test
-    void registerNewUser_AlreadyExistingUsername_Problem() {
+    void createUser_AlreadyExistingUsername_Problem() {
         // given
-        CreateUserRequest registerUserDto = new CreateUserRequest("user", "user@example.com", "mysecretpassword");
+        CreateUserRequest createUserRequest = new CreateUserRequest("user", "user@example.com", "mysecretpassword");
 
         given(userRepository.findUserByUsername(anyString())).willReturn(Optional.of(new User()));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.createNewUser(registerUserDto)).isInstanceOf(Problem.class).hasMessage("ACCOUNT_ALREADY_EXISTS");
+        assertThatThrownBy(() -> underTest.createUser(createUserRequest)).isInstanceOf(Problem.class).hasMessage("ACCOUNT_ALREADY_EXISTS");
 
-        verify(userRepository, never()).registerNewUser(any());
+        verify(userRepository, never()).createUser(any());
     }
 
     @Test

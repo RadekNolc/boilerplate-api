@@ -6,10 +6,10 @@ import com.radeknolc.apiname.user.domain.entity.User;
 import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
 import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
 import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;
-import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import com.radeknolc.apiname.user.domain.repository.UserRepository;
 import com.radeknolc.apiname.user.domain.usecase.CreateUserUseCase;
 import com.radeknolc.apiname.user.domain.usecase.DefaultRoleUseCase;
+import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,9 +28,9 @@ public class UserService implements CreateUserUseCase, UserDetailsService {
     private final DefaultRoleUseCase defaultRoleUseCase;
 
     @Override
-    public void createNewUser(CreateUserRequest createUserRequest) {
+    public void createUser(CreateUserRequest createUserRequest) {
         userRepository.findUserByUsername(createUserRequest.username()).ifPresent(user -> {
-            log.warn("Attempt to register user with an username that already exists: {}", createUserRequest.username());
+            log.warn("Attempt to create user with an username that already exists: {}", createUserRequest.username());
             throw new Problem(ApiProblemCode.ACCOUNT_ALREADY_EXISTS);
         });
 
@@ -42,11 +42,11 @@ public class UserService implements CreateUserUseCase, UserDetailsService {
         user.setActivityStatus(ActivityStatus.ACTIVE);
         user.setAccountStatus(AccountStatus.OK);
         user.setCredentialsStatus(CredentialsStatus.OK);
-        userRepository.registerNewUser(user);
+        userRepository.createUser(user);
     }
 
-    private String getEncryptedPassword(CreateUserRequest registerUserDto) {
-        return passwordEncoder.encode(registerUserDto.password());
+    private String getEncryptedPassword(CreateUserRequest createUserRequest) {
+        return passwordEncoder.encode(createUserRequest.password());
     }
 
     @Override

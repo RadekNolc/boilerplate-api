@@ -4,9 +4,9 @@ import com.radeknolc.apiname.user.domain.entity.User;
 import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
 import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
 import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;
+import com.radeknolc.apiname.user.infrastructure.persistence.entity.UserEntity;
 import com.radeknolc.apiname.user.infrastructure.persistence.mapper.UserMapper;
 import com.radeknolc.apiname.user.infrastructure.persistence.repository.UserEntityRepository;
-import com.radeknolc.apiname.user.infrastructure.persistence.entity.UserEntity;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class UserRepositoryAdapterTest {
     }
 
     @Test
-    void registerNewUser_ArgumentCapturing_Captured() {
+    void createUser_ArgumentCapturing_Captured() {
         // given
         User user = User.builder()
                 .username("user")
@@ -47,7 +47,7 @@ class UserRepositoryAdapterTest {
                 .build();
 
         // when
-        underTest.registerNewUser(user);
+        underTest.createUser(user);
 
         // then
         ArgumentCaptor<UserEntity> userEntityArgumentCaptor = ArgumentCaptor.forClass(UserEntity.class);

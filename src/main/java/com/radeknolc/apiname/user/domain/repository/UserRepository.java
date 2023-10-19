@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    void registerNewUser(User user);
+    void createUser(User user);
     Optional<User> findUserByUsername(String username);
 }

@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.radeknolc.apiname.auth.domain.usecase.TokenUseCase;
 import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
 import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
-import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;
 import com.radeknolc.apiname.user.infrastructure.persistence.entity.RoleEntity;
 import com.radeknolc.apiname.user.infrastructure.persistence.entity.UserEntity;
 import com.radeknolc.apiname.user.infrastructure.persistence.repository.RoleEntityRepository;
 import com.radeknolc.apiname.user.infrastructure.persistence.repository.UserEntityRepository;
+import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -112,8 +112,9 @@ class CreateUserControllerTest {
     }
 
     @Test
-    void register_Authorized_Success() throws Exception {
+    void createUser_Authorized_Success() throws Exception {
         // given
+        long beforeUsersCount = userEntityRepository.count();
         CreateUserRequest createUserRequest = new CreateUserRequest("newuser", "newuser@example.com", "Mysecretpassw0rd*");
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -127,11 +128,12 @@ class CreateUserControllerTest {
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(userEntityRepository.count()).isEqualTo(beforeUsersCount + 1);
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidInputsForUserSignIn")
-    void register_InvalidInputValue_HandledException(CreateUserRequest createUserRequest, List<String[]> violationData) throws Exception {
+    void createUser_InvalidInputValue_HandledException(CreateUserRequest createUserRequest, List<String[]> violationData) throws Exception {
         // given
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE);
@@ -151,7 +153,7 @@ class CreateUserControllerTest {
     }
 
     @Test
-    void register_NotAuthenticated_HandledException() throws Exception {
+    void createUser_NotAuthenticated_HandledException() throws Exception {
         // given
         CreateUserRequest createUserRequest = new CreateUserRequest("newuser", "newuser@example.com", "Mysecretpassw0rd*");
 
@@ -169,7 +171,7 @@ class CreateUserControllerTest {
     }
 
     @Test
-    void register_NotAuthorized_HandledException() throws Exception {
+    void createUser_NotAuthorized_HandledException() throws Exception {
         // given
         CreateUserRequest createUserRequest = new CreateUserRequest("newuser", "newuser@example.com", "Mysecretpassw0rd*");
 

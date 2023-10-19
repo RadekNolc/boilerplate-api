@@ -6,5 +6,5 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 public interface CreateUserUseCase {
-    void createNewUser(@Valid CreateUserRequest createUserRequest);
+    void createUser(@Valid CreateUserRequest createUserRequest);
 }
