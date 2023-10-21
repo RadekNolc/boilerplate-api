@@ -29,6 +29,7 @@ public class User implements AuditedEntity, UserDetails {
     private ActivityStatus activityStatus;
     private AccountStatus accountStatus;
     private CredentialsStatus credentialsStatus;
+    @Builder.Default
     private Set<Role> roles = Set.of();
     private LocalDateTime createdAt;
     private String createdBy;
