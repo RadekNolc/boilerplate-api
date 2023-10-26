@@ -3,11 +3,8 @@ package com.radeknolc.apiname.user.application;
 import com.radeknolc.apiname.shared.problem.domain.exception.Problem;
 import com.radeknolc.apiname.user.domain.entity.Role;
 import com.radeknolc.apiname.user.domain.entity.User;
-import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
-import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
-import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;
 import com.radeknolc.apiname.user.domain.repository.UserRepository;
-import com.radeknolc.apiname.user.domain.usecase.DefaultRoleUseCase;
+import com.radeknolc.apiname.user.domain.usecase.RoleUseCase;
 import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -39,17 +35,17 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private DefaultRoleUseCase defaultRoleUseCase;
+    private RoleUseCase roleUseCase;
 
     private UserService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new UserService(userRepository, passwordEncoder, defaultRoleUseCase);
+        underTest = new UserService(userRepository, passwordEncoder, roleUseCase);
     }
 
     @Test
-    void createUser_NotExistingUsername_Void() {
+    void createUser_NotExistingUsername_User() {
         // given
         String username = "user";
         String email = "user@example.com";
@@ -65,15 +61,12 @@ class UserServiceTest {
                 .username(username)
                 .email(email)
                 .password(password)
-                .activityStatus(ActivityStatus.ACTIVE)
-                .accountStatus(AccountStatus.OK)
-                .credentialsStatus(CredentialsStatus.OK)
                 .roles(Set.of(defaultRole))
                 .build();
 
         String hashedPassword = "myhashedpassword";
         given(passwordEncoder.encode(anyString())).willReturn(hashedPassword);
-        given(defaultRoleUseCase.getDefaultRole()).willReturn(defaultRole);
+        given(roleUseCase.getDefaultRole()).willReturn(defaultRole);
 
         // when
         underTest.createUser(createUserRequest);
@@ -84,7 +77,7 @@ class UserServiceTest {
 
         User capturedUser = userArgumentCaptor.getValue();
 
-        assertThat(capturedUser).usingRecursiveComparison().ignoringFields("password").isEqualTo(expectedUser);
+        assertThat(capturedUser).usingRecursiveComparison().ignoringFields("id", "password").isEqualTo(expectedUser);
         assertThat(capturedUser.getPassword()).isEqualTo(hashedPassword);
     }
 
@@ -100,44 +93,5 @@ class UserServiceTest {
         assertThatThrownBy(() -> underTest.createUser(createUserRequest)).isInstanceOf(Problem.class).hasMessage("ACCOUNT_ALREADY_EXISTS");
 
         verify(userRepository, never()).createUser(any());
-    }
-
-    @Test
-    void loadUserByUsername_AlreadyExistingUser_User() {
-        // given
-        String username = "user";
-        User expectedUser = User.builder()
-                .username(username)
-                .email("user@example.com")
-                .password("mysecretpassword")
-                .activityStatus(ActivityStatus.ACTIVE)
-                .accountStatus(AccountStatus.OK)
-                .credentialsStatus(CredentialsStatus.OK)
-                .build();
-
-        given(userRepository.findUserByUsername(anyString())).willReturn(Optional.of(expectedUser));
-
-        //when
-        User user = underTest.loadUserByUsername(username);
-
-        //then
-        ArgumentCaptor<String> usernameArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(userRepository).findUserByUsername(usernameArgumentCaptor.capture());
-
-        String capturedUsername = usernameArgumentCaptor.getValue();
-
-        assertThat(capturedUsername).isEqualTo(username);
-        assertThat(user).isEqualTo(expectedUser);
-    }
-
-    @Test
-    void loadUserByUsername_NotExistingUser_UsernameNotFoundException() {
-        // given
-        String username = "user";
-        given(userRepository.findUserByUsername(anyString())).willReturn(Optional.empty());
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.loadUserByUsername(username)).isInstanceOf(UsernameNotFoundException.class);
     }
 }

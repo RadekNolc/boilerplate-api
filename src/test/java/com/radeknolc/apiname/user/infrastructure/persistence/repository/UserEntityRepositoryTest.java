@@ -1,12 +1,12 @@
 package com.radeknolc.apiname.user.infrastructure.persistence.repository;
 
-import com.radeknolc.apiname.auth.infrastructure.jwt.audit.AuditorAware;
+import com.radeknolc.apiname.authentication.infrastructure.jwt.audit.AuditorAware;
 import com.radeknolc.apiname.user.domain.entity.User;
 import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
 import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
 import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;
-import com.radeknolc.apiname.user.infrastructure.persistence.mapper.UserMapper;
 import com.radeknolc.apiname.user.infrastructure.persistence.entity.UserEntity;
+import com.radeknolc.apiname.user.infrastructure.persistence.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

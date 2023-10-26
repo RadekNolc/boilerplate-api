@@ -26,9 +26,12 @@ public class User implements AuditedEntity, UserDetails {
     private String username;
     private String email;
     private String password;
-    private ActivityStatus activityStatus;
-    private AccountStatus accountStatus;
-    private CredentialsStatus credentialsStatus;
+    @Builder.Default
+    private ActivityStatus activityStatus = ActivityStatus.getDefault();
+    @Builder.Default
+    private AccountStatus accountStatus = AccountStatus.getDefault();
+    @Builder.Default
+    private CredentialsStatus credentialsStatus = CredentialsStatus.getDefault();
     @Builder.Default
     private Set<Role> roles = Set.of();
     private LocalDateTime createdAt;

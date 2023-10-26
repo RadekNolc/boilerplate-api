@@ -1,24 +1,25 @@
 package com.radeknolc.apiname.shared.general.infrastructure.aop;
 
-import com.radeknolc.apiname.shared.problem.domain.ProblemCode;
+import com.radeknolc.apiname.shared.problem.domain.entity.FieldProblem;
 import com.radeknolc.apiname.shared.problem.domain.exception.Problem;
 import com.radeknolc.apiname.shared.problem.ui.dto.response.ProblemResponse;
+import com.radeknolc.apiname.shared.problem.ui.dto.response.ValidationProblemResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Path;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Clock;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static com.radeknolc.apiname.shared.problem.domain.enumeration.ApiProblemCode.VALIDATION_ERROR;
-
+@Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ControllerExceptionHandler {
@@ -26,27 +27,20 @@ public class ControllerExceptionHandler {
     private final Clock clock;
 
     @ExceptionHandler(Problem.class)
-    public ResponseEntity<ProblemResponse<String>> handleProblem(Problem problem, HttpServletRequest httpServletRequest) {
-        return ResponseEntity.badRequest().body(new ProblemResponse<>(clock, problem.getMessage(), httpServletRequest));
+    public ResponseEntity<ProblemResponse> handleProblem(Problem problem, HttpServletRequest httpServletRequest) {
+        return ResponseEntity.badRequest().body(new ProblemResponse(clock, problem.getProblemCode(), httpServletRequest));
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ProblemResponse<ProblemCode>> handleValidationException(ConstraintViolationException exception, HttpServletRequest httpServletRequest) {
-        Map<String, String> errors = new HashMap<>();
-        Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
-        if (!constraintViolations.isEmpty()) {
-            for (ConstraintViolation<?> constraint : constraintViolations) {
-                String field = null;
-                for (Path.Node node : constraint.getPropertyPath()) {
-                    field = node.getName();
-                }
-
-                if (field != null) {
-                    errors.put(field, constraint.getMessage());
-                }
-            }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemResponse> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest httpServletRequest) {
+        Map<String, FieldProblem> errors = new HashMap<>();
+        BindingResult bindingResult = exception.getBindingResult();
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        for (FieldError fieldError : fieldErrors) {
+            FieldProblem fieldProblem = new FieldProblem(fieldError.getField(), fieldError.getDefaultMessage());
+            errors.put(fieldError.getObjectName(), fieldProblem);
         }
 
-        return ResponseEntity.unprocessableEntity().body(new ProblemResponse<>(clock, VALIDATION_ERROR, errors, httpServletRequest));
+        return ResponseEntity.unprocessableEntity().body(new ValidationProblemResponse(clock, httpServletRequest, errors));
     }
 }

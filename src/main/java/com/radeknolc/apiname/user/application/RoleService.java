@@ -4,7 +4,7 @@ import com.radeknolc.apiname.shared.problem.domain.enumeration.ApiProblemCode;
 import com.radeknolc.apiname.shared.problem.domain.exception.Problem;
 import com.radeknolc.apiname.user.domain.entity.Role;
 import com.radeknolc.apiname.user.domain.repository.RoleRepository;
-import com.radeknolc.apiname.user.domain.usecase.DefaultRoleUseCase;
+import com.radeknolc.apiname.user.domain.usecase.RoleUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-public class RoleService implements DefaultRoleUseCase {
+public class RoleService implements RoleUseCase {
 
     private final RoleRepository roleRepository;
     private final String DEFAULT_ROLE = Role.USER;
