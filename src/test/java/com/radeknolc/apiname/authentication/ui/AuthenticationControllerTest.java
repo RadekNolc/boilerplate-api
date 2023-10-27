@@ -3,8 +3,7 @@ package com.radeknolc.apiname.authentication.ui;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.radeknolc.apiname.authentication.domain.usecase.TokenUseCase;
 import com.radeknolc.apiname.authentication.ui.dto.request.SignInRequest;
-import com.radeknolc.apiname.shared.problem.domain.ProblemCode;
-import com.radeknolc.apiname.shared.problem.domain.enumeration.ApiProblemCode;
+import com.radeknolc.apiname.exception.domain.enumeration.ProblemCode;
 import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
 import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
 import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;
@@ -29,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.radeknolc.apiname.exception.domain.enumeration.AuthenticationProblemCode.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -218,27 +218,27 @@ class AuthenticationControllerTest {
         return Stream.of(
                 Arguments.of(
                         new SignInRequest(NORMAL_USER_USERNAME, "justrandompassword"),
-                        ApiProblemCode.BAD_CREDENTIALS
+                        BAD_CREDENTIALS
                 ), // Bad credentials
 
                 Arguments.of(
                         new SignInRequest(INACTIVE_USER_USERNAME, USER_PASSWORD),
-                        ApiProblemCode.ACCOUNT_INACTIVE
+                        ACCOUNT_INACTIVE
                 ), // Inactive account
 
                 Arguments.of(
                         new SignInRequest(EXPIRED_USER_USERNAME, USER_PASSWORD),
-                        ApiProblemCode.ACCOUNT_EXPIRED
+                        ACCOUNT_EXPIRED
                 ), // Expired account
 
                 Arguments.of(
                         new SignInRequest(LOCKED_USER_USERNAME, USER_PASSWORD),
-                        ApiProblemCode.ACCOUNT_LOCKED
+                        ACCOUNT_LOCKED
                 ), // Locked account
 
                 Arguments.of(
                         new SignInRequest(EXPIRED_CREDENTIALS_USER_USERNAME, USER_PASSWORD),
-                        ApiProblemCode.CREDENTIALS_EXPIRED
+                        CREDENTIALS_EXPIRED
                 ) // Expired credentials account
         );
     }

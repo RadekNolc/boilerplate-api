@@ -1,6 +1,6 @@
 package com.radeknolc.apiname.user.application;
 
-import com.radeknolc.apiname.shared.problem.domain.exception.Problem;
+import com.radeknolc.apiname.exception.domain.exception.Problem;
 import com.radeknolc.apiname.user.domain.entity.Role;
 import com.radeknolc.apiname.user.domain.repository.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;

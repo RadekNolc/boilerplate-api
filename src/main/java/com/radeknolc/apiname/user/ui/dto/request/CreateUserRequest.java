@@ -1,7 +1,7 @@
 package com.radeknolc.apiname.user.ui.dto.request;
 
-import com.radeknolc.apiname.shared.general.infrastructure.validation.NotExists;
-import com.radeknolc.apiname.shared.general.infrastructure.validation.Password;
+import com.radeknolc.apiname.authentication.infrastructure.validation.Password;
+import com.radeknolc.apiname.general.infrastructure.validation.NotExists;
 import com.radeknolc.apiname.user.infrastructure.persistence.entity.UserEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

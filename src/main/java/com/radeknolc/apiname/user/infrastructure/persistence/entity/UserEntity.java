@@ -1,6 +1,6 @@
 package com.radeknolc.apiname.user.infrastructure.persistence.entity;
 
-import com.radeknolc.apiname.shared.general.domain.entity.AuditedEntity;
+import com.radeknolc.apiname.general.entity.AuditedEntity;
 import com.radeknolc.apiname.user.domain.enumeration.AccountStatus;
 import com.radeknolc.apiname.user.domain.enumeration.ActivityStatus;
 import com.radeknolc.apiname.user.domain.enumeration.CredentialsStatus;

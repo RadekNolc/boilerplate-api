@@ -1,6 +1,6 @@
 package com.radeknolc.apiname.user.infrastructure.persistence.entity;
 
-import com.radeknolc.apiname.shared.general.domain.entity.BaseEntity;
+import com.radeknolc.apiname.general.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

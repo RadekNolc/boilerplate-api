@@ -1,7 +1,7 @@
 package com.radeknolc.apiname.authentication.infrastructure.jwt.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.radeknolc.apiname.shared.problem.ui.dto.response.ProblemResponse;
+import com.radeknolc.apiname.exception.ui.dto.response.ProblemResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.Clock;
 
-import static com.radeknolc.apiname.shared.problem.domain.enumeration.ApiProblemCode.ACCESS_DENIED;
+import static com.radeknolc.apiname.exception.domain.enumeration.AuthenticationProblemCode.ACCESS_DENIED;
+
 
 @Slf4j
 @Component

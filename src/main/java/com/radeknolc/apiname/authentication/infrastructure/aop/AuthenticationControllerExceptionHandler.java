@@ -1,6 +1,6 @@
 package com.radeknolc.apiname.authentication.infrastructure.aop;
 
-import com.radeknolc.apiname.shared.problem.ui.dto.response.ProblemResponse;
+import com.radeknolc.apiname.exception.ui.dto.response.ProblemResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Clock;
 
-import static com.radeknolc.apiname.shared.problem.domain.enumeration.ApiProblemCode.*;
+import static com.radeknolc.apiname.exception.domain.enumeration.AuthenticationProblemCode.*;
 
 @RestControllerAdvice
 @RequiredArgsConstructor

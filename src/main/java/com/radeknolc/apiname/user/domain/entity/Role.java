@@ -1,7 +1,7 @@
 package com.radeknolc.apiname.user.domain.entity;
 
 
-import com.radeknolc.apiname.shared.general.domain.entity.BaseEntity;
+import com.radeknolc.apiname.general.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

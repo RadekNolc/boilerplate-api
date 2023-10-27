@@ -1,7 +1,6 @@
 package com.radeknolc.apiname.user.application;
 
-import com.radeknolc.apiname.shared.problem.domain.enumeration.ApiProblemCode;
-import com.radeknolc.apiname.shared.problem.domain.exception.Problem;
+import com.radeknolc.apiname.exception.domain.exception.Problem;
 import com.radeknolc.apiname.user.domain.entity.User;
 import com.radeknolc.apiname.user.domain.repository.UserRepository;
 import com.radeknolc.apiname.user.domain.usecase.RoleUseCase;
@@ -13,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 import java.util.UUID;
+
+import static com.radeknolc.apiname.exception.domain.enumeration.UserProblemCode.ACCOUNT_ALREADY_EXISTS;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class UserService implements UserUseCase {
     public User createUser(CreateUserRequest createUserRequest) {
         userRepository.findUserByUsername(createUserRequest.username()).ifPresent(user -> {
             log.warn("Attempt to create user with an username that already exists: {}", createUserRequest.username());
-            throw new Problem(ApiProblemCode.ACCOUNT_ALREADY_EXISTS);
+            throw new Problem(ACCOUNT_ALREADY_EXISTS);
         });
 
         User user = new User();
