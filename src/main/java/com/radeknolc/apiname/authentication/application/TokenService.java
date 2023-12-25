@@ -6,8 +6,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.radeknolc.apiname.authentication.domain.usecase.TokenUseCase;
 import com.radeknolc.apiname.user.domain.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
@@ -16,11 +14,13 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.Date;
 
-@Slf4j
-@RequiredArgsConstructor
 public class TokenService implements TokenUseCase {
 
     private final Clock clock;
+
+    public TokenService(Clock clock) {
+        this.clock = clock;
+    }
 
     @Value("${jwt.token.secret}")
     private String secretKey;

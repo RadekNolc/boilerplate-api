@@ -6,8 +6,8 @@ import com.radeknolc.apiname.user.domain.repository.UserRepository;
 import com.radeknolc.apiname.user.domain.usecase.RoleUseCase;
 import com.radeknolc.apiname.user.domain.usecase.UserUseCase;
 import com.radeknolc.apiname.user.ui.dto.request.CreateUserRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
@@ -15,27 +15,33 @@ import java.util.UUID;
 
 import static com.radeknolc.apiname.exception.domain.enumeration.UserProblemCode.ACCOUNT_ALREADY_EXISTS;
 
-@Slf4j
-@RequiredArgsConstructor
 public class UserService implements UserUseCase {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleUseCase roleUseCase;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleUseCase roleUseCase) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleUseCase = roleUseCase;
+    }
 
     @Override
     public User createUser(CreateUserRequest createUserRequest) {
         userRepository.findUserByUsername(createUserRequest.username()).ifPresent(user -> {
-            log.warn("Attempt to create user with an username that already exists: {}", createUserRequest.username());
+            logger.warn("Attempt to create user with an username that already exists: {}", createUserRequest.username());
             throw new Problem(ACCOUNT_ALREADY_EXISTS);
         });
 
-        User user = new User();
-        user.setId(UUID.randomUUID());
-        user.setUsername(createUserRequest.username());
-        user.setEmail(createUserRequest.email());
-        user.setRoles(Set.of(roleUseCase.getDefaultRole()));
-        user.setPassword(getEncryptedPassword(createUserRequest));
+        User user = new User.Builder()
+                .id(UUID.randomUUID())
+                .username(createUserRequest.username())
+                .email(createUserRequest.email())
+                .roles(Set.of(roleUseCase.getDefaultRole()))
+                .password(getEncryptedPassword(createUserRequest))
+                .build();
         userRepository.createUser(user);
         return user;
     }

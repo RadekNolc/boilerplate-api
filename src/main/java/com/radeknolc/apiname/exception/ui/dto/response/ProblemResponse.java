@@ -2,13 +2,9 @@ package com.radeknolc.apiname.exception.ui.dto.response;
 
 import com.radeknolc.apiname.exception.domain.enumeration.ProblemCode;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.time.Clock;
 
-@Getter
-@AllArgsConstructor
 public class ProblemResponse {
 
     private final long timestamp;
@@ -19,5 +15,20 @@ public class ProblemResponse {
         this.timestamp = clock.millis();
         this.problemCode = problemCode;
         this.requestUri = httpServletRequest.getRequestURI();
+    }
+
+    @SuppressWarnings("unused") // Used in JSON object in response
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    @SuppressWarnings("unused") // Used in JSON object in response
+    public ProblemCode getProblemCode() {
+        return problemCode;
+    }
+
+    @SuppressWarnings("unused") // Used in JSON object in response
+    public String getRequestUri() {
+        return requestUri;
     }
 }

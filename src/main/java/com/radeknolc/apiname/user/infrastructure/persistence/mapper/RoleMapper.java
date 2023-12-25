@@ -5,15 +5,15 @@ import com.radeknolc.apiname.user.infrastructure.persistence.entity.RoleEntity;
 
 public class RoleMapper {
 
-    public static RoleEntity modelToEntity(Role source) {
-        return RoleEntity.builder()
+    public static RoleEntity toEntity(Role source) {
+        return new RoleEntity.Builder()
                 .id(source.getId())
                 .name(source.getName())
                 .build();
     }
 
-    public static Role entityToModel(RoleEntity source) {
-        return Role.builder()
+    public static Role toModel(RoleEntity source) {
+        return new Role.Builder()
                 .id(source.getId())
                 .name(source.getName())
                 .build();

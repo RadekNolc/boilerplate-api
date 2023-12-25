@@ -2,8 +2,6 @@ package com.radeknolc.apiname.authentication.infrastructure.jwt.filter;
 
 import com.radeknolc.apiname.authentication.infrastructure.jwt.handler.AccessDeniedHandler;
 import com.radeknolc.apiname.authentication.infrastructure.jwt.handler.AuthenticationEntryPoint;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -13,15 +11,20 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component("securityFilterChainImpl")
-@RequiredArgsConstructor
 public class SecurityFilterChain {
 
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationTokenFilter authenticationTokenFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
+
+    public SecurityFilterChain(AuthenticationProvider authenticationProvider, AuthenticationTokenFilter authenticationTokenFilter, AuthenticationEntryPoint authenticationEntryPoint, AccessDeniedHandler accessDeniedHandler) {
+        this.authenticationProvider = authenticationProvider;
+        this.authenticationTokenFilter = authenticationTokenFilter;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+    }
 
     @Bean
     org.springframework.security.web.SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -32,7 +35,7 @@ public class SecurityFilterChain {
 
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers("/api/authentication/signIn").anonymous()
-                .requestMatchers("/api/user/create").hasAuthority("ADMIN")
+                .requestMatchers("/api/user/create").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/**").denyAll()
         );
